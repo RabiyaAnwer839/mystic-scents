@@ -96,25 +96,6 @@
   --border: var(--blush);
   --input: var(--blush);
   --ring: var(--blue);
-  --background: var(--deep-red);
-  --foreground: var(--cream);
-  --card: var(--berry);
-  --card-foreground: var(--cream);
-  --popover: var(--berry);
-  --popover-foreground: var(--cream);
-  --primary: var(--cream);
-  --primary-foreground: var(--deep-red);
-  --secondary: var(--berry);
-  --secondary-foreground: var(--cream);
-  --muted: var(--berry);
-  --muted-foreground: var(--blush);
-  --accent: var(--hot-pink);
-  --accent-foreground: var(--cream);
-  --destructive: var(--hot-pink);
-  --destructive-foreground: var(--cream);
-  --border: var(--blush);
-  --input: var(--blush);
-  --ring: var(--blue);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }

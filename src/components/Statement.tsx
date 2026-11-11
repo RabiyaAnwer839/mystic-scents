@@ -11,7 +11,7 @@ export default function Statement() {
       const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
       mm.add({ wide: "(min-width: 701px)", small: "(max-width: 700px)" }, (c) => {
-        const wide = !!c.conditions?.wide;
+        const wide = !!c.conditions?.["wide"];
 
         // arrival: scales only the opening wrapper, which the main timeline never touches
         gsap.fromTo(".s1", { scale: 1.12 }, { scale: 1, ease: "power2.out",

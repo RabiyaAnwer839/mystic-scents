@@ -13,7 +13,7 @@ export default function Profile() {
       const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
       mm.add({ wide: "(min-width: 701px)", small: "(max-width: 700px)" }, (c) => {
-        const wide = !!c.conditions?.wide;
+        const wide = !!c.conditions?.["wide"];
         const trig = { trigger: root.current, scrub: 1 };
 
         // entrance: the first scene settles in while the hero scrolls away

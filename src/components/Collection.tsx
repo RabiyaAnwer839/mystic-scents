@@ -21,7 +21,7 @@ export default function Collection() {
       const q = gsap.utils.selector(root.current);
       const mm = gsap.matchMedia();
       mm.add({ wide: "(min-width: 701px)", small: "(max-width: 700px)" }, (c) => {
-        const wide = !!c.conditions?.wide;
+        const wide = !!c.conditions?.["wide"];
         const st = { trigger: root.current, start: "top top", end: "bottom bottom" };
 
         // arrival: only scales the title wrapper, which the main timeline never touches
@@ -40,7 +40,9 @@ export default function Collection() {
           tl.fromTo(`.bg-${i}`, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.09 }, t));
 
         S.forEach((_, i) => {
-          const [a, b] = R[i];
+          const range = R[i];
+          if (!range) return;
+          const [a, b] = range;
           const el = `.sc-${i}`;
           tl.fromTo(`${el} .ph`, { autoAlpha: 0, x: "9vw", scale: 1.1 }, { autoAlpha: 1, x: 0, scale: 1, duration: 0.08, ease: "power2.out" }, a)
             .to(`${el} .ph`, { y: wide ? "-3vh" : "-1.5vh", scale: 1.04, rotation: wide ? (i % 2 ? -1 : 1) : 0, duration: b - a - 0.14 }, a + 0.08)
@@ -56,12 +58,15 @@ export default function Collection() {
           .fromTo(".ind-bar b", { scaleX: 0 }, { scaleX: 1, duration: 0.77 }, 0.11)
           .to(".ind", { autoAlpha: 0, duration: 0.03 }, 0.87);
         const n = q(".ind-n")[0], t = q(".ind-t")[0], stage = q(".c-stage")[0];
+        if (!n || !t || !stage) return;
         let cur = -1;
         ScrollTrigger.create({ ...st, onUpdate: (self) => {
           const p = self.progress;
           const i = p < 0.32 ? 0 : p < 0.52 ? 1 : p < 0.71 ? 2 : 3;
           if (i === cur) return;
-          cur = i; n.textContent = `0${i + 1} / 04`; t.textContent = S[i].name; stage.setAttribute("data-i", String(i));
+          const scent = S[i];
+          if (!scent) return;
+          cur = i; n.textContent = `0${i + 1} / 04`; t.textContent = scent.name; stage.setAttribute("data-i", String(i));
         } });
 
         // final moment
