@@ -1,0 +1,19 @@
+{
+  "source": "code archive: mystic-scents-hero_8.zip",
+  "capabilities": [
+    { "capability": "code", "source": "Next.js single-page fragrance showcase", "outcome": "Recreated the complete responsive home page, animated scenes, navigation, styling, and route metadata.", "status": "verified", "next_action": "None." },
+    { "capability": "schema", "source": "No database schema detected", "outcome": "No application schema needed.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "records", "source": "No database or record export detected", "outcome": "No existing records to import.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "auth identities", "source": "No authentication detected", "outcome": "No user migration required.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "authorization", "source": "No roles or access-control logic detected", "outcome": "No authorization behavior to migrate.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "uploaded file bytes", "source": "Bundled local images, WebP frame sequences, and brand icon", "outcome": "Preserved and served the source artwork and icon locally; verified product images and hero frame rendering.", "status": "verified", "next_action": "None." },
+    { "capability": "external providers", "source": "No third-party production providers detected", "outcome": "No providers to reconnect.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "public endpoints", "source": "No API routes or external endpoints detected", "outcome": "No public endpoints to migrate.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "callbacks", "source": "No OAuth or external callbacks detected", "outcome": "No callbacks to migrate.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "webhooks", "source": "No webhooks detected", "outcome": "No webhooks to migrate.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "schedules", "source": "No scheduled jobs detected", "outcome": "No schedules to migrate.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "secrets", "source": "No environment variable names or secret-backed integrations detected", "outcome": "No secrets required.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "cutover", "source": "Static showcase; no external service cutover detected", "outcome": "No cutover required.", "status": "not_applicable", "next_action": "None." },
+    { "capability": "verification", "source": "Lovable preview and project checks", "outcome": "Home route, desktop and phone rendering, all four perfume scenes, menu links, media loading, and page errors verified; routing test and typecheck pass.", "status": "verified", "next_action": "None." }
+  ]
+}

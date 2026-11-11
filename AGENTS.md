@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project decisions
+
+- Load GSAP, ScrollTrigger, and Lenis through browser-only dynamic imports coordinated by `src/lib/scroll-animations.ts`; this keeps browser animation code out of SSR and ensures every scene shares one registered plugin instance.
