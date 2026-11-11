@@ -45,9 +45,9 @@ export default function Hero() {
       tl.to(".cue", { autoAlpha: 0, y: 16, duration: 0.04 }, 0.01);
       CAPS.forEach(([, a, b], i) => {
         const el = `.cap-${i}`;
-        tl.fromTo(el, { autoAlpha: 0, y: 36, filter: "blur(10px)" },
-          { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.04, ease: "power2.out" }, a)
-          .to(el, { autoAlpha: 0, y: -28, filter: "blur(10px)", duration: 0.04, ease: "power2.in" }, b - 0.04);
+        tl.fromTo(el, { autoAlpha: 0, y: 36 },
+          { autoAlpha: 1, y: 0, duration: 0.04, ease: "power2.out" }, a)
+          .to(el, { autoAlpha: 0, y: -28, duration: 0.04, ease: "power2.in" }, b - 0.04);
       });
       tl.fromTo(".h-word", { yPercent: 115 }, { yPercent: 0, stagger: 0.012, duration: 0.05, ease: "power3.out" }, 0.79)
         .fromTo(".eyebrow", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.04 }, 0.78)

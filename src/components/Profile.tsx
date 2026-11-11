@@ -73,12 +73,12 @@ export default function Profile() {
     <section ref={root} className="prof" aria-label="Scent profile">
       <div className="p-top" />
       <div className="p-stage">
-        <img className="pile" src="/img/pile.webp" alt="" decoding="async" />
-        <img className="bubbles" src="/img/bubbles.webp" alt="" decoding="async" />
+        <img className="pile" src="/img/pile.webp" alt="" loading="lazy" decoding="async" />
+        <img className="bubbles" src="/img/bubbles.webp" alt="" loading="lazy" decoding="async" />
         <div className="hot" />
         <div className="p-shade" />
-        <div className="arch"><img src="/img/wild.webp" alt="" decoding="async" /></div>
-        <img className="splash" src="/img/splash.webp" alt="" decoding="async" />
+        <div className="arch"><img src="/img/wild.webp" alt="" loading="lazy" decoding="async" /></div>
+        <img className="splash" src="/img/splash.webp" alt="" loading="lazy" decoding="async" />
 
         <i className="p-cue" />
         <h2 className="word w-sweet">SWEET.</h2>

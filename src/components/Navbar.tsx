@@ -12,12 +12,47 @@ const LINKS = [
 export default function Navbar() {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState("#home");
 
   useEffect(() => {
-    const f = () => setSolid(window.scrollY > 40);
+    let frame = 0;
+    const f = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        const next = window.scrollY > 40;
+        setSolid((current) => (current === next ? current : next));
+      });
+    };
     f();
     window.addEventListener("scroll", f, { passive: true });
-    return () => window.removeEventListener("scroll", f);
+    return () => {
+      window.removeEventListener("scroll", f);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  useEffect(() => {
+    const sections = LINKS.map(([, hash]) => document.querySelector(hash)).filter(
+      (section): section is Element => section instanceof Element,
+    );
+    if (typeof IntersectionObserver === "undefined") return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const current = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        const id = current?.target.id;
+        if (id) {
+          const next = `#${id}`;
+          setActiveLink((currentLink) => (currentLink === next ? currentLink : next));
+        }
+      },
+      { rootMargin: "-32% 0px -58% 0px", threshold: [0, 0.25, 0.5] },
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
   // the menu pauses Lenis only; no layout changes, so ScrollTrigger never re-measures
@@ -41,7 +76,7 @@ export default function Navbar() {
       <nav className={`nav${solid ? " solid" : ""}${open ? " open" : ""}`} aria-label="Main">
         <a className="nav-brand" href="#home" onClick={() => setOpen(false)}>MYSTIC SCENTS</a>
         <ul className="nav-links">
-          {LINKS.map(([t, h]) => <li key={t}><a href={h}>{t}</a></li>)}
+          {LINKS.map(([t, h]) => <li key={t}><a href={h} aria-current={activeLink === h ? "location" : undefined}>{t}</a></li>)}
         </ul>
         <a className="nav-cta" href="#scents">EXPLORE</a>
         <Button
@@ -58,7 +93,7 @@ export default function Navbar() {
         </Button>
       </nav>
       <div id="menu" className={`menu${open ? " open" : ""}`} aria-hidden={!open}>
-        {LINKS.map(([t, h]) => <a key={t} href={h} onClick={() => setOpen(false)} tabIndex={open ? 0 : -1}>{t}</a>)}
+        {LINKS.map(([t, h]) => <a key={t} href={h} aria-current={activeLink === h ? "location" : undefined} onClick={() => setOpen(false)} tabIndex={open ? 0 : -1}>{t}</a>)}
         <a className="menu-cta" href="#scents" onClick={() => setOpen(false)} tabIndex={open ? 0 : -1}>EXPLORE THE SCENTS</a>
       </div>
     </>

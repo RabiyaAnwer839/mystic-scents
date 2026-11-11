@@ -1,3 +1,5 @@
 - [x] Port the Mystic Scents single-page experience and source artwork to the home page.
 - [x] Verify build, desktop/mobile rendering, navigation, and bundled media.
 - [x] Update the migration ledger with verified results and any remaining blockers.
+- [ ] Audit and polish the existing Mystic Scents navbar, animations, and media loading without changing its look or content.
+- [ ] Verify performance behavior and layout at desktop, tablet, 375px, and 390px widths; report changes and any simplifications.

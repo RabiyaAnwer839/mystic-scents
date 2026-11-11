@@ -322,9 +322,11 @@ body { overflow-x: clip; color: var(--cream); font-family: "Helvetica Neue", Hel
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between;
   padding: clamp(14px, 2vw, 22px) clamp(20px, 4vw, 64px); border-bottom: 1px solid transparent;
-  transition: background .5s, backdrop-filter .5s, padding .4s, border-color .5s; }
+  animation: nav-enter .5s cubic-bezier(.2,.8,.2,1) both;
+  transition: background .35s, backdrop-filter .35s, border-color .35s; }
+@keyframes nav-enter { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 .nav.solid { background: var(--mystic-tone-13); -webkit-backdrop-filter: blur(16px) saturate(1.5); backdrop-filter: blur(16px) saturate(1.5);
-  border-color: var(--mystic-tone-60); padding-block: 11px; }
+  border-color: var(--mystic-tone-60); }
 .nav.open, .nav.open.solid { background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; border-color: transparent; }
 .nav a { color: var(--cream); text-decoration: none; }
 .nav-brand { font-weight: 800; font-size: 13.0px; letter-spacing: .34em; }
@@ -332,26 +334,45 @@ body { overflow-x: clip; color: var(--cream); font-family: "Helvetica Neue", Hel
 .nav-links a { position: relative; font-size: 12.0px; font-weight: 700; letter-spacing: .22em; opacity: .85; transition: opacity .3s; }
 .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px; background: var(--blush);
   transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
-.nav-links a:hover { opacity: 1; } .nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a:hover, .nav-links a[aria-current="location"] { opacity: 1; }
+.nav-links a:hover::after, .nav-links a[aria-current="location"]::after { transform: scaleX(1); }
 .nav-cta { font-size: 12.0px; font-weight: 800; letter-spacing: .22em; padding: 11px 22px; border-radius: 999px;
   border: 1px solid var(--mystic-tone-61); transition: background .3s, color .3s; }
 .nav-cta:hover { background: var(--cream); color: var(--deep-red) !important; }
 .nav-burger { display: none; position: relative; width: 44px; height: 44px; background: none; border: 0; color: var(--cream); cursor: pointer; }
-.nav-burger i { position: absolute; left: 11px; right: 11px; height: 1.5px; background: currentColor; transition: transform .45s cubic-bezier(.7,0,.2,1), top .45s cubic-bezier(.7,0,.2,1); }
+.nav-burger i { position: absolute; left: 11px; right: 11px; height: 1.5px; background: currentColor; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
 .nav-burger i:nth-child(1) { top: 18px; } .nav-burger i:nth-child(2) { top: 25px; }
-.nav.open .nav-burger i:nth-child(1) { top: 21.5px; transform: rotate(45deg); }
-.nav.open .nav-burger i:nth-child(2) { top: 21.5px; transform: rotate(-45deg); }
+.nav.open .nav-burger i:nth-child(1) { transform: translateY(3.5px) rotate(45deg); }
+.nav.open .nav-burger i:nth-child(2) { transform: translateY(-3.5px) rotate(-45deg); }
 .menu { position: fixed; inset: 0; z-index: 55; display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 28px;
   background: radial-gradient(120% 90% at 85% 0%, var(--hot-pink), var(--berry) 55%, var(--deep-red));
-  clip-path: circle(0 at calc(100% - 40px) 34px); visibility: hidden; transition: clip-path .7s cubic-bezier(.7,0,.2,1), visibility 0s .7s; }
-.menu.open { clip-path: circle(150% at calc(100% - 40px) 34px); visibility: visible; transition: clip-path .7s cubic-bezier(.7,0,.2,1), visibility 0s; }
+  clip-path: circle(0 at calc(100% - 40px) 34px); visibility: hidden; transition: clip-path .45s cubic-bezier(.2,.8,.2,1), visibility 0s .45s; }
+.menu.open { clip-path: circle(150% at calc(100% - 40px) 34px); visibility: visible; transition: clip-path .45s cubic-bezier(.2,.8,.2,1), visibility 0s; }
 .menu a { display: block; color: var(--cream); text-decoration: none; font-weight: 800; font-size: 88.0px; letter-spacing: 0; line-height: 1.02;
-  opacity: 0; transform: translateY(24px); transition: opacity .5s, transform .6s cubic-bezier(.2,.8,.2,1); }
+  opacity: 0; transform: translateY(14px); transition: opacity .3s, transform .35s cubic-bezier(.2,.8,.2,1); }
 .menu.open a { opacity: 1; transform: none; }
-.menu.open a:nth-child(1) { transition-delay: .25s; } .menu.open a:nth-child(2) { transition-delay: .31s; }
-.menu.open a:nth-child(3) { transition-delay: .37s; } .menu.open a:nth-child(4) { transition-delay: .43s; } .menu.open a:nth-child(5) { transition-delay: .5s; }
+.menu.open a:nth-child(1) { transition-delay: .12s; } .menu.open a:nth-child(2) { transition-delay: .16s; }
+.menu.open a:nth-child(3) { transition-delay: .2s; } .menu.open a:nth-child(4) { transition-delay: .24s; } .menu.open a:nth-child(5) { transition-delay: .28s; }
 .menu .menu-cta { margin-top: 28px; align-self: flex-start; font-size: 12.0px; letter-spacing: .24em; padding: 16px 26px; border-radius: 999px; background: var(--cream); color: var(--deep-red); }
 @media (max-width: 860px) { .nav-links, .nav-cta { display: none; } .nav-burger { display: block; } }
+@media (prefers-reduced-motion: reduce) {
+  .nav { animation: none; transition: none; }
+  .nav-links a, .nav-links a::after, .nav-burger i, .menu, .menu a { transition: none; }
+  .menu.open a { transition-delay: 0s; }
+  .cue i { animation: none; }
+  .track .cap { visibility: hidden !important; }
+  .track .finale .eyebrow, .track .finale .sub, .track .finale .cta { visibility: visible; opacity: 1; transform: none; }
+  .prof .w-juicy, .prof .w-electric { display: none; }
+  .prof .fin-s { visibility: visible; opacity: 1; transform: none; }
+  .coll .t-wrap, .coll .sc:not(.sc-0), .coll .fin3 { display: none; }
+  .coll .bg-0, .coll .sc-0 .ph { visibility: visible; opacity: 1; transform: none; }
+  .coll .sc-0 .md, .coll .sc-0 .ds, .coll .ind { visibility: visible; opacity: 1; transform: none; }
+  .mt .s1 { display: none; }
+  .mt .s3 { visibility: visible; opacity: 1; transform: none; }
+  .mt .fr-a, .mt .fr-b { visibility: visible; opacity: .85; transform: none; }
+  .mt .m-cap { visibility: visible; opacity: 1; transform: none; }
+  .cl .cl-p, .cl .cl-btns > * { visibility: visible; opacity: 1; transform: none; }
+}
 
 /* ---- closing CTA ---- */
 .cl { position: relative; height: 180vh; overflow: clip; margin-top: -1px; background: var(--deep-red); }
