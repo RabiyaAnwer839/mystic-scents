@@ -1,0 +1,3 @@
+- [ ] Port the Mystic Scents single-page experience and source artwork to the home page.
+- [ ] Verify build, desktop/mobile rendering, navigation, and bundled media.
+- [ ] Update the migration ledger with verified results and any remaining blockers.
