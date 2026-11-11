@@ -17,7 +17,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         menu:
-          "relative h-11 w-11 border-0 bg-transparent p-0 text-cream shadow-none hover:bg-transparent hover:text-cream",
+          "relative h-11 w-11 border-0 bg-transparent p-0 text-cream shadow-none transition-none hover:bg-transparent hover:text-cream",
       },
       size: {
         default: "h-9 px-4 py-2",

@@ -82,10 +82,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Mystic Scents — Wear the Moment" },
-      { name: "description", content: "A juicy fragrance world: Strawberry, Watermelon, Blueberry and Peach. Four moods, one scent universe." },
+      {
+        name: "description",
+        content:
+          "A juicy fragrance world: Strawberry, Watermelon, Blueberry and Peach. Four moods, one scent universe.",
+      },
       { name: "author", content: "Mystic Scents" },
       { property: "og:title", content: "Mystic Scents — Wear the Moment" },
-      { property: "og:description", content: "A juicy fragrance world: Strawberry, Watermelon, Blueberry and Peach. Four moods, one scent universe." },
+      {
+        property: "og:description",
+        content:
+          "A juicy fragrance world: Strawberry, Watermelon, Blueberry and Peach. Four moods, one scent universe.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },

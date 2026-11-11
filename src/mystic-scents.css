@@ -96,6 +96,7 @@
   --border: var(--blush);
   --input: var(--blush);
   --ring: var(--blue);
+  --radius: 0.5rem;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
