@@ -322,9 +322,11 @@ body { overflow-x: clip; color: var(--cream); font-family: "Helvetica Neue", Hel
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
 .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; align-items: center; justify-content: space-between;
   padding: clamp(14px, 2vw, 22px) clamp(20px, 4vw, 64px); border-bottom: 1px solid transparent;
-  transition: background .5s, backdrop-filter .5s, padding .4s, border-color .5s; }
+  animation: nav-enter .5s cubic-bezier(.2,.8,.2,1) both;
+  transition: background .35s, backdrop-filter .35s, border-color .35s; }
+@keyframes nav-enter { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 .nav.solid { background: var(--mystic-tone-13); -webkit-backdrop-filter: blur(16px) saturate(1.5); backdrop-filter: blur(16px) saturate(1.5);
-  border-color: var(--mystic-tone-60); padding-block: 11px; }
+  border-color: var(--mystic-tone-60); }
 .nav.open, .nav.open.solid { background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; border-color: transparent; }
 .nav a { color: var(--cream); text-decoration: none; }
 .nav-brand { font-weight: 800; font-size: 13.0px; letter-spacing: .34em; }
@@ -353,6 +355,11 @@ body { overflow-x: clip; color: var(--cream); font-family: "Helvetica Neue", Hel
 .menu.open a:nth-child(3) { transition-delay: .2s; } .menu.open a:nth-child(4) { transition-delay: .24s; } .menu.open a:nth-child(5) { transition-delay: .28s; }
 .menu .menu-cta { margin-top: 28px; align-self: flex-start; font-size: 12.0px; letter-spacing: .24em; padding: 16px 26px; border-radius: 999px; background: var(--cream); color: var(--deep-red); }
 @media (max-width: 860px) { .nav-links, .nav-cta { display: none; } .nav-burger { display: block; } }
+@media (prefers-reduced-motion: reduce) {
+  .nav { animation: none; transition: none; }
+  .nav-links a, .nav-links a::after, .nav-burger i, .menu, .menu a { transition: none; }
+  .menu.open a { transition-delay: 0s; }
+}
 
 /* ---- closing CTA ---- */
 .cl { position: relative; height: 180vh; overflow: clip; margin-top: -1px; background: var(--deep-red); }

@@ -15,10 +15,21 @@ export default function Navbar() {
   const [activeLink, setActiveLink] = useState("#home");
 
   useEffect(() => {
-    const f = () => setSolid(window.scrollY > 40);
+    let frame = 0;
+    const f = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        const next = window.scrollY > 40;
+        setSolid((current) => (current === next ? current : next));
+      });
+    };
     f();
     window.addEventListener("scroll", f, { passive: true });
-    return () => window.removeEventListener("scroll", f);
+    return () => {
+      window.removeEventListener("scroll", f);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
@@ -33,7 +44,10 @@ export default function Navbar() {
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         const id = current?.target.id;
-        if (id) setActiveLink(`#${id}`);
+        if (id) {
+          const next = `#${id}`;
+          setActiveLink((currentLink) => (currentLink === next ? currentLink : next));
+        }
       },
       { rootMargin: "-32% 0px -58% 0px", threshold: [0, 0.25, 0.5] },
     );
