@@ -47,56 +47,89 @@ export function useFrameSequence(name: string) {
   const frames = useRef<Map<number, Frame>>(new Map());
   const decoding = useRef<Set<number>>(new Set());
   const countRef = useRef(0);
+  const patternRef = useRef("");
+  const generationRef = useRef(0);
+  const fetchQueue = useRef<number[]>([]);
+  const fetching = useRef<Set<number>>(new Set());
+  const activeFetches = useRef(0);
   const lastProgress = useRef(0);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (!name) return;
+    const generation = ++generationRef.current;
     setReady(false);
     let alive = true;
+    fetchQueue.current = [];
     (async () => {
-      const m = await fetch(`/frames/${name}/manifest.json`).then((r) => r.json());
+      const response = await fetch(`/frames/${name}/manifest.json`);
+      if (!response.ok) throw new Error("Unable to load the hero animation manifest");
+      const m = await response.json();
       if (!alive) return;
       countRef.current = m.count;
+      patternRef.current = m.pattern;
       blobs.current = new Array(m.count).fill(null);
-      const url = (i: number) =>
-        m.pattern.replace("%03d", String(i + 1).padStart(3, "0"));
-
-      const grab = async (i: number) => {
-        try {
-          const bl = await fetch(`/${url(i)}`).then((r) => r.blob());
-          if (alive) blobs.current[i] = bl;
-        } catch {
-          /* nearestDecoded covers gaps */
-        }
-      };
-      // lazy: gate "ready" on the opening frames only, stream the rest in order
-      const HEAD = Math.min(m.count, 72);
-      await Promise.all(Array.from({ length: HEAD }, (_, i) => grab(i)));
-      if (!alive) return;
-      const firstBlob = blobs.current[0];
-      if (firstBlob) {
-        try {
-          const f = await decodeBlob(firstBlob);
-          if (!alive) return releaseFrame(f);
-          frames.current.set(0, f);
-        } catch {
-          /* retried by the draw loop */
-        }
-      }
+      const firstUrl = `/${m.pattern.replace("%03d", "001")}`;
+      const firstResponse = await fetch(firstUrl);
+      if (!firstResponse.ok) throw new Error("Unable to load the opening hero frame");
+      const firstBlob = await firstResponse.blob();
+      if (!alive || generation !== generationRef.current) return;
+      blobs.current[0] = firstBlob;
+      const firstFrame = await decodeBlob(firstBlob);
+      if (!alive || generation !== generationRef.current) return releaseFrame(firstFrame);
+      frames.current.set(0, firstFrame);
       setReady(true);
-      let next = HEAD;
-      const worker = async () => {
-        while (alive && next < m.count) await grab(next++);
-      };
-      await Promise.all(Array.from({ length: 6 }, worker));
     })();
     return () => {
       alive = false;
+      if (generation === generationRef.current) fetchQueue.current = [];
       frames.current.forEach(releaseFrame);
       frames.current.clear();
     };
   }, [name]);
+
+  function scheduleFetchWindow(center: number) {
+    const generation = generationRef.current;
+    if (!patternRef.current || countRef.current === 0) return;
+
+    const desired: number[] = [];
+    const start = Math.max(0, center - 4);
+    const end = Math.min(countRef.current - 1, center + 36);
+    for (let index = Math.max(start, center); index <= end; index++) desired.push(index);
+    for (let index = Math.min(center - 1, end); index >= start; index--) desired.push(index);
+    fetchQueue.current = desired.filter(
+      (index) => !blobs.current[index] && !fetching.current.has(index),
+    );
+
+    const pump = () => {
+      while (
+        generation === generationRef.current &&
+        activeFetches.current < 4 &&
+        fetchQueue.current.length > 0
+      ) {
+        const index = fetchQueue.current.shift();
+        if (index === undefined || blobs.current[index] || fetching.current.has(index)) continue;
+        fetching.current.add(index);
+        activeFetches.current += 1;
+        const url = `/${patternRef.current.replace("%03d", String(index + 1).padStart(3, "0"))}`;
+        void fetch(url)
+          .then(async (response) => {
+            if (!response.ok) throw new Error(`Unable to load hero frame ${index + 1}`);
+            const blob = await response.blob();
+            if (generation === generationRef.current) blobs.current[index] = blob;
+          })
+          .catch(() => {
+            // A nearby decoded frame remains available if an individual frame fails.
+          })
+          .finally(() => {
+            fetching.current.delete(index);
+            activeFetches.current = Math.max(0, activeFetches.current - 1);
+            if (generation === generationRef.current) pump();
+          });
+      }
+    };
+    pump();
+  }
 
   function decode(i: number) {
     if (frames.current.has(i) || decoding.current.has(i) || !blobs.current[i]) return;
@@ -132,7 +165,7 @@ export function useFrameSequence(name: string) {
   function nearestDecoded(i: number): Frame | null {
     const current = frames.current.get(i);
     if (current) return current;
-    for (let d = 1; d < countRef.current; d++) {
+    for (let d = 1; d <= 30; d++) {
       const before = frames.current.get(i - d);
       if (before) return before;
       const after = frames.current.get(i + d);
@@ -150,12 +183,14 @@ export function useFrameSequence(name: string) {
     const i0 = Math.floor(f);
     const i1 = Math.min(countRef.current - 1, i0 + 1);
     const t = f - i0;
-    manageWindow(Math.round(f));
+    const center = Math.round(f);
+    scheduleFetchWindow(center);
+    manageWindow(center);
     const a = nearestDecoded(i0);
     if (!a) return;
     const b = t > 0.02 ? nearestDecoded(i1) : null;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const cw = Math.round(canvas.clientWidth * dpr);
     const ch = Math.round(canvas.clientHeight * dpr);
     if (canvas.width !== cw || canvas.height !== ch) {

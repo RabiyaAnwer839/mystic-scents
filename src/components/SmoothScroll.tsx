@@ -35,6 +35,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
           if (!active) return;
           const lenis = new Lenis({ lerp: 0.075, smoothWheel: true });
           setLenis(lenis);
+          if (document.querySelector("#menu.open")) lenis.stop();
           lenis.on("scroll", ScrollTrigger.update);
           const raf = (time: number) => lenis.raf(time * 1000);
           gsap.ticker.add(raf);
