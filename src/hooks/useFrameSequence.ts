@@ -70,15 +70,21 @@ export function useFrameSequence(name: string) {
       patternRef.current = m.pattern;
       blobs.current = new Array(m.count).fill(null);
       const firstUrl = `/${m.pattern.replace("%03d", "001")}`;
-      const firstResponse = await fetch(firstUrl);
-      if (!firstResponse.ok) throw new Error("Unable to load the opening hero frame");
-      const firstBlob = await firstResponse.blob();
-      if (!alive || generation !== generationRef.current) return;
-      blobs.current[0] = firstBlob;
-      const firstFrame = await decodeBlob(firstBlob);
-      if (!alive || generation !== generationRef.current) return releaseFrame(firstFrame);
-      frames.current.set(0, firstFrame);
-      setReady(true);
+      try {
+        const firstResponse = await fetch(firstUrl);
+        if (!firstResponse.ok) throw new Error("Unable to load the opening hero frame");
+        const firstBlob = await firstResponse.blob();
+        if (!alive || generation !== generationRef.current) return;
+        blobs.current[0] = firstBlob;
+        const firstFrame = await decodeBlob(firstBlob);
+        if (!alive || generation !== generationRef.current) return releaseFrame(firstFrame);
+        frames.current.set(0, firstFrame);
+        setReady(true);
+      } catch (error) {
+        if (alive && generation === generationRef.current) {
+          console.error("Unable to initialize the hero animation", error);
+        }
+      }
     })();
     return () => {
       alive = false;
