@@ -24,6 +24,8 @@ function loadScrollRuntime() {
 export function startScrollAnimation(
   setup: (runtime: ScrollRuntime) => (() => void) | void,
 ) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return () => {};
+
   let active = true;
   let teardown = () => {};
 

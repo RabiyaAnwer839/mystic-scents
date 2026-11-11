@@ -359,6 +359,19 @@ body { overflow-x: clip; color: var(--cream); font-family: "Helvetica Neue", Hel
   .nav { animation: none; transition: none; }
   .nav-links a, .nav-links a::after, .nav-burger i, .menu, .menu a { transition: none; }
   .menu.open a { transition-delay: 0s; }
+  .cue i { animation: none; }
+  .track .cap { visibility: hidden !important; }
+  .track .finale .eyebrow, .track .finale .sub, .track .finale .cta { visibility: visible; opacity: 1; transform: none; }
+  .prof .w-juicy, .prof .w-electric { display: none; }
+  .prof .fin-s { visibility: visible; opacity: 1; transform: none; }
+  .coll .t-wrap, .coll .sc:not(.sc-0), .coll .fin3 { display: none; }
+  .coll .bg-0, .coll .sc-0 .ph { visibility: visible; opacity: 1; transform: none; }
+  .coll .sc-0 .md, .coll .sc-0 .ds, .coll .ind { visibility: visible; opacity: 1; transform: none; }
+  .mt .s1 { display: none; }
+  .mt .s3 { visibility: visible; opacity: 1; transform: none; }
+  .mt .fr-a, .mt .fr-b { visibility: visible; opacity: .85; transform: none; }
+  .mt .m-cap { visibility: visible; opacity: 1; transform: none; }
+  .cl .cl-p, .cl .cl-btns > * { visibility: visible; opacity: 1; transform: none; }
 }
 
 /* ---- closing CTA ---- */

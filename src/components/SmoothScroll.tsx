@@ -11,6 +11,7 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     // a refresh always starts at the top, so the film and every pinned scene begin in sync
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let active = true;
     let stopScrollAnimation = () => {};

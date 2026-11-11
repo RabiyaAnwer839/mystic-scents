@@ -52,6 +52,7 @@ export function useFrameSequence(name: string) {
   const fetchQueue = useRef<number[]>([]);
   const fetching = useRef<Set<number>>(new Set());
   const activeFetches = useRef(0);
+  const lastWindowCenter = useRef(-1);
   const lastProgress = useRef(0);
   const [ready, setReady] = useState(false);
 
@@ -60,6 +61,7 @@ export function useFrameSequence(name: string) {
     const generation = ++generationRef.current;
     setReady(false);
     let alive = true;
+    lastWindowCenter.current = -1;
     fetchQueue.current = [];
     (async () => {
       const response = await fetch(`/frames/${name}/manifest.json`);
@@ -122,7 +124,10 @@ export function useFrameSequence(name: string) {
           .then(async (response) => {
             if (!response.ok) throw new Error(`Unable to load hero frame ${index + 1}`);
             const blob = await response.blob();
-            if (generation === generationRef.current) blobs.current[index] = blob;
+            if (generation === generationRef.current) {
+              blobs.current[index] = blob;
+              if (Math.abs(index - lastWindowCenter.current) <= 24) decode(index);
+            }
           })
           .catch(() => {
             // A nearby decoded frame remains available if an individual frame fails.
@@ -190,8 +195,11 @@ export function useFrameSequence(name: string) {
     const i1 = Math.min(countRef.current - 1, i0 + 1);
     const t = f - i0;
     const center = Math.round(f);
-    scheduleFetchWindow(center);
-    manageWindow(center);
+    if (center !== lastWindowCenter.current) {
+      lastWindowCenter.current = center;
+      scheduleFetchWindow(center);
+      manageWindow(center);
+    }
     const a = nearestDecoded(i0);
     if (!a) return;
     const b = t > 0.02 ? nearestDecoded(i1) : null;

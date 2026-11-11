@@ -9,6 +9,9 @@ export const getLenis = () => lenis;
 export function goTo(hash: string) {
   const target = hash === "#home" || hash === "#" ? 0 : hash;
   if (lenis) lenis.scrollTo(target as never, { duration: 1.8, easing: (t: number) => 1 - Math.pow(1 - t, 4) });
-  else if (target === 0) window.scrollTo({ top: 0, behavior: "smooth" });
-  else document.querySelector(hash)?.scrollIntoView({ behavior: "smooth" });
+  else {
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    if (target === 0) window.scrollTo({ top: 0, behavior });
+    else document.querySelector(hash)?.scrollIntoView({ behavior });
+  }
 }
