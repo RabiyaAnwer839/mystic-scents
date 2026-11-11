@@ -1,5 +1,5 @@
 import { type ReactNode, useEffect } from "react";
-import { goTo, setLenis } from "@/lib/scroll";
+import { getLenis, goTo, setLenis } from "@/lib/scroll";
 import { startScrollAnimation } from "@/lib/scroll-animations";
 
 /**
@@ -15,6 +15,18 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     let active = true;
     let stopScrollAnimation = () => {};
     let teardownLenis = () => {};
+    const onClick = (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const anchor = target.closest<HTMLAnchorElement>('a[href^="#"]');
+      if (!anchor) return;
+      event.preventDefault();
+      getLenis()?.start();
+      goTo(anchor.getAttribute("href") || "#home");
+    };
+    const onRefresh = () => window.dispatchEvent(new Event("mystic-scroll-refresh"));
+    document.addEventListener("click", onClick);
+    window.addEventListener("load", onRefresh);
 
     void import("lenis")
       .then(({ default: Lenis }) => {
@@ -28,22 +40,14 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
           gsap.ticker.add(raf);
           gsap.ticker.lagSmoothing(0);
 
-          const onClick = (e: MouseEvent) => {
-            const target = e.target;
-            if (!(target instanceof Element)) return;
-            const anchor = target.closest<HTMLAnchorElement>('a[href^="#"]');
-            if (!anchor) return;
-            e.preventDefault();
-            lenis.start();
-            goTo(anchor.getAttribute("href") || "#home");
-          };
-          document.addEventListener("click", onClick);
-          const onLoad = () => ScrollTrigger.refresh();
-          window.addEventListener("load", onLoad);
+          const refresh = () => ScrollTrigger.refresh();
+          window.addEventListener("mystic-scroll-refresh", refresh);
+          window.addEventListener("resize", refresh, { passive: true });
+          window.dispatchEvent(new Event("mystic-scroll-refresh"));
 
           teardownLenis = () => {
-            document.removeEventListener("click", onClick);
-            window.removeEventListener("load", onLoad);
+            window.removeEventListener("mystic-scroll-refresh", refresh);
+            window.removeEventListener("resize", refresh);
             gsap.ticker.remove(raf);
             setLenis(null);
             lenis.destroy();
@@ -58,6 +62,8 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
 
     return () => {
       active = false;
+      document.removeEventListener("click", onClick);
+      window.removeEventListener("load", onRefresh);
       stopScrollAnimation();
       teardownLenis();
     };
