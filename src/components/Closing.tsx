@@ -31,8 +31,8 @@ export default function Closing() {
       <div className="cl-stage">
         <div className="cl-bg" />
         <div className="cl-glow" />
-        <div className="cl-a"><img src="img/bubbles.webp" alt="" decoding="async" /></div>
-        <img className="cl-c" src="img/splash.webp" alt="" decoding="async" />
+        <div className="cl-a"><img src="/img/bubbles.webp" alt="" decoding="async" /></div>
+        <img className="cl-c" src="/img/splash.webp" alt="" decoding="async" />
         <div className="cl-body">
           <h2 className="cl-h" aria-label="Wear your mood.">
             <span className="ln"><span className="c1">WEAR</span></span>

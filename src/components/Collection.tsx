@@ -92,7 +92,7 @@ export default function Collection() {
         {S.map((s, i) => (
           <div key={s.name} className={`sc sc-${i}`}>
             <div className={`ph ph-${i}`}>
-              <img src={`img/c-${s.img}-l.webp`} srcSet={`img/c-${s.img}-s.webp 640w, img/c-${s.img}-l.webp 960w`}
+              <img src={`/img/c-${s.img}-l.webp`} srcSet={`/img/c-${s.img}-s.webp 640w, /img/c-${s.img}-l.webp 960w`}
                 sizes="(max-width: 700px) 100vw, 60vh" alt={`${s.name.charAt(0)}${s.name.slice(1).toLowerCase()} perfume bottle — ${s.mood.toLowerCase()}`} loading={i === 0 ? "eager" : "lazy"} decoding="async" />
             </div>
             <div className="tx">

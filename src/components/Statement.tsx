@@ -25,7 +25,6 @@ export default function Statement() {
 
         // STATE 1 — MORE THAN A SCENT. (minimal, slowly tightening)
         tl.fromTo(".m1", { yPercent: 125 }, { yPercent: 0, stagger: 0.03, duration: 0.1, ease: "power3.out" }, 0)
-          .fromTo(".m1", { letterSpacing: "0.01em" }, { letterSpacing: "-0.06em", duration: 0.26 }, 0)
           .to(".s1", { autoAlpha: 0, y: "-6vh", duration: 0.08, ease: "power2.in" }, 0.24);
 
         // STATE 2 — fragments of the Mystic world drift in behind
@@ -65,9 +64,9 @@ export default function Statement() {
       <div className="m-stage">
         <div className="warm" />
 
-        <div className="fr fr-a"><img src="img/bubbles.webp" alt="" loading="lazy" decoding="async" /></div>
-        <div className="fr fr-b"><img src="img/pile.webp" alt="" loading="lazy" decoding="async" /></div>
-        <img className="fr-c" src="img/splash.webp" alt="" loading="lazy" decoding="async" />
+        <div className="fr fr-a"><img src="/img/bubbles.webp" alt="" loading="lazy" decoding="async" /></div>
+        <div className="fr fr-b"><img src="/img/pile.webp" alt="" loading="lazy" decoding="async" /></div>
+        <img className="fr-c" src="/img/splash.webp" alt="" loading="lazy" decoding="async" />
 
         <h2 className="s1" aria-label="More than a scent.">
           <span className="ln"><span className="m1">MORE THAN</span></span>
